@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class LinesDrawer : MonoBehaviour
 {
@@ -14,6 +15,9 @@ public class LinesDrawer : MonoBehaviour
     private Route currentRoute;
 
     private RaycastDetector raycastDetector = new();
+
+    //Events:
+    public UnityAction<Route, List<Vector3>> OnParkLinkedToLine;
 
 
     private void Start()
@@ -94,6 +98,7 @@ public class LinesDrawer : MonoBehaviour
                 }
                 else
                 {
+                    OnParkLinkedToLine?.Invoke(currentRoute, currentLine.points);
                     currentRoute.Disactivate();
                 }
             }

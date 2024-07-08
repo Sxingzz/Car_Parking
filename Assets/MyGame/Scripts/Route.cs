@@ -1,11 +1,19 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 using UnityEngine;
 
 public class Route : MonoBehaviour
 {
     [HideInInspector]
     public bool isActive = true;
+
+    [HideInInspector]
+    public Vector3[] linePoints;
+
+    [SerializeField]
+    private LinesDrawer linesDrawer;
 
     public Line line;
     public Park park;
@@ -19,6 +27,19 @@ public class Route : MonoBehaviour
     [SerializeField]
     private Color lineColor;
 
+    private void Start()
+    {
+        linesDrawer.OnParkLinkedToLine += OnParkLinkedToLineHandler;
+    }
+
+    private void OnParkLinkedToLineHandler(Route route, List<Vector3> points)
+    {
+        if (route == this)
+        {
+            linePoints = points.ToArray();
+            Game.Instance.RegisterRoute(this);
+        }
+    }
 
     public void Disactivate()
     {
