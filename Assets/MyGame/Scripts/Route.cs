@@ -12,6 +12,8 @@ public class Route : MonoBehaviour
     [HideInInspector]
     public Vector3[] linePoints;
 
+    public float maxLineLength;
+
     [SerializeField]
     private LinesDrawer linesDrawer;
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using Unity.VisualScripting;
 
 public class Car : MonoBehaviour
 {
@@ -12,6 +13,9 @@ public class Car : MonoBehaviour
 
     [SerializeField]
     private MeshRenderer meshRenderer;
+
+    [SerializeField]
+    private ParticleSystem smokeFX;
 
     [SerializeField]
     private Rigidbody rb;
@@ -33,6 +37,40 @@ public class Car : MonoBehaviour
         // mà không có sự thay đổi về tốc độ.
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.transform.TryGetComponent(out Car othercar))
+        {
+            StopDancingAnim();
+            rb.DOKill(false); // DOKill dùng để dừng các hoạt động trong TWEENING
+
+            // add Explotion
+            Vector3 hitpoint = collision.contacts[0].point;
+            AddExplotionForce(hitpoint);
+            smokeFX.Play();
+
+            Game.Instance.OnCarCollision?.Invoke();
+        }
+    }
+
+    private void AddExplotionForce(Vector3 point)
+    {
+        rb.AddExplosionForce(400f, point, 3f);
+        rb.AddForceAtPosition(Vector3.up * 2f, point, ForceMode.Impulse);
+        rb.AddTorque(new Vector3(GetRandomAngle(), GetRandomAngle(), GetRandomAngle()));
+        // addtorque: lực xoắn
+    }
+
+    private float GetRandomAngle()
+    {
+        float angle = 10f;
+        float rand = Random.value;
+        return rand > 0.5f ? angle : -angle;
+    }
+
+
+
+
     public void Move(Vector3[] path)
     {
         rb.DOLocalPath(path, 2f * durationMultiplier * path.Length)
@@ -41,6 +79,11 @@ public class Car : MonoBehaviour
 
         // SetLookAt: đảm bảo rằng đối tượng sẽ "nhìn"
         // về hướng di chuyển trong suốt quá trình di chuyển.
+    }
+
+    public void StopDancingAnim()
+    {
+        bodyTransform.DOKill(true);
     }
 
     public void SetColor(Color color)
