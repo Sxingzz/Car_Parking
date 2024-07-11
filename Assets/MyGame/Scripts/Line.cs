@@ -20,6 +20,7 @@ public class Line : MonoBehaviour
 
     private float pointFixedYAxis;
     private Vector3 prevPoint;
+    
 
     private void Start()
     {
@@ -30,6 +31,7 @@ public class Line : MonoBehaviour
     public void Init()
     {
         gameObject.SetActive(true);
+       
     }
 
     public void Clear()
@@ -45,7 +47,7 @@ public class Line : MonoBehaviour
     {
         newPoint.y = pointFixedYAxis; // cố định giá trị y của newpoint
 
-        if (pointsCount >= 1 && Vector3.Distance(newPoint,GetLastPoint()) < minPointsDistance)
+        if (pointsCount >= 1 && Vector3.Distance(newPoint, GetLastPoint()) < minPointsDistance)
         {
             return;
         }
@@ -77,5 +79,6 @@ public class Line : MonoBehaviour
     {
         lineRenderer.sharedMaterials[0].color = color;
     }
+
 
 }

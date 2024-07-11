@@ -68,9 +68,6 @@ public class Car : MonoBehaviour
         return rand > 0.5f ? angle : -angle;
     }
 
-
-
-
     public void Move(Vector3[] path)
     {
         rb.DOLocalPath(path, 2f * durationMultiplier * path.Length)
