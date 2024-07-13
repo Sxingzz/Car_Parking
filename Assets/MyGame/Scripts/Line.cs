@@ -74,7 +74,6 @@ public class Line : MonoBehaviour
         return lineRenderer.GetPosition(pointsCount - 1);
     }
 
-
     public void SetColor(Color color)
     {
         lineRenderer.sharedMaterials[0].color = color;
